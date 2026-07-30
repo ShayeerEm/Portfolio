@@ -314,6 +314,71 @@ function initCounters() {
   counters.forEach(c => observer.observe(c));
 }
 
+/* ── PHOTOGRAPHY ALBUMS (Google Drive-backed) ─────────────────
+   Thumbnails use Drive's public thumbnail endpoint (small, cached,
+   lazy-loaded) — the full-size image is only ever fetched inside the
+   modal preview iframe when a visitor actually clicks a photo. */
+function initPhotoAlbums() {
+  const grid = document.getElementById('photo-grid');
+  if (!grid || typeof PHOTO_ALBUMS === 'undefined') return;
+
+  const modal       = document.getElementById('photo-modal');
+  const modalFrame   = document.getElementById('photo-modal-frame');
+  const modalClose   = document.getElementById('photo-modal-close');
+  const modalBackdrop = modal.querySelector('.photo-modal__backdrop');
+
+  function openModal(id) {
+    modalFrame.src = `https://drive.google.com/file/d/${id}/preview`;
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modalFrame.src = '';
+    document.body.style.overflow = '';
+  }
+  modalClose.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  const frag = document.createDocumentFragment();
+  Object.keys(PHOTO_ALBUMS).forEach((albumKey) => {
+    const album = PHOTO_ALBUMS[albumKey];
+    album.ids.forEach((id) => {
+      const item = document.createElement('div');
+      item.className = 'photo-item';
+      item.setAttribute('data-album', albumKey);
+
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.alt = `${album.label} photograph`;
+      img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w400`;
+      img.addEventListener('load', () => img.setAttribute('data-loaded', ''));
+
+      item.appendChild(img);
+      item.addEventListener('click', () => openModal(id));
+      frag.appendChild(item);
+    });
+  });
+  grid.appendChild(frag);
+
+  const filterBtns = document.querySelectorAll('.photo-filter-btn');
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      const filter = btn.getAttribute('data-album');
+      grid.querySelectorAll('.photo-item').forEach((item) => {
+        const show = filter === 'all' || item.getAttribute('data-album') === filter;
+        item.style.display = show ? '' : 'none';
+      });
+    });
+  });
+}
+
 /* ── INIT ──────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   applyTheme(getStoredTheme());
@@ -327,6 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initSkillBars();
   initPortfolioFilter();
+  initPhotoAlbums();
   initBlogFilter();
   initTOC();
   initContactForm();
