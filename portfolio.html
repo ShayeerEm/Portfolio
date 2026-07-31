@@ -63,122 +63,8 @@
       </div>
     </section>
 
-    <!-- FILTER + GRID -->
-    <section class="section">
-      <div class="container">
-
-        <div class="port-filters anim-fade">
-          <button class="filter-btn is-active" data-filter="all">All Work</button>
-          <button class="filter-btn" data-filter="drawing">Pencil &amp; Ink</button>
-          <button class="filter-btn" data-filter="digital">Digital Art</button>
-          <button class="filter-btn" data-filter="photography">Photography</button>
-          <button class="filter-btn" data-filter="design">Web &amp; Design</button>
-        </div>
-
-        <div class="port-grid anim-fade">
-
-          <div class="port-item" data-category="drawing">
-            <span aria-hidden="true">✏</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">Portrait Study I</p>
-              <p class="port-item__overlay-sub">Pencil on Paper · 2023</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="drawing">
-            <span aria-hidden="true">§</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">Architectural Ink Study</p>
-              <p class="port-item__overlay-sub">Ink on Paper · 2022</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="drawing">
-            <span aria-hidden="true">✏</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">Figure Study</p>
-              <p class="port-item__overlay-sub">Pencil on Paper · 2024</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="drawing">
-            <span aria-hidden="true">◇</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">Still Life</p>
-              <p class="port-item__overlay-sub">Pencil on Paper · 2021</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="digital">
-            <span aria-hidden="true">◈</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">Digital Composition I</p>
-              <p class="port-item__overlay-sub">Digital Art · 2024</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="digital">
-            <span aria-hidden="true">◈</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">Digital Portrait</p>
-              <p class="port-item__overlay-sub">Digital Art · 2023</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="photography">
-            <span aria-hidden="true">⊙</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">Product Study</p>
-              <p class="port-item__overlay-sub">Commercial · 2023</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="photography">
-            <span aria-hidden="true">⊙</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">Portrait Session</p>
-              <p class="port-item__overlay-sub">Portrait · 2024</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="photography">
-            <span aria-hidden="true">⊙</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">Event Coverage</p>
-              <p class="port-item__overlay-sub">Event · 2022</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="design">
-            <span aria-hidden="true">▣</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">SAZICOR Branding</p>
-              <p class="port-item__overlay-sub">Brand Identity · 2020</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="design">
-            <span aria-hidden="true">▣</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">Client Web Project</p>
-              <p class="port-item__overlay-sub">Web Design · 2023</p>
-            </div>
-          </div>
-
-          <div class="port-item" data-category="design">
-            <span aria-hidden="true">▣</span>
-            <div class="port-item__overlay">
-              <p class="port-item__overlay-title">This Portfolio</p>
-              <p class="port-item__overlay-sub">Web Design · 2025</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
     <!-- PHOTOGRAPHY ALBUMS -->
-    <section class="section section--alt">
+    <section class="section">
       <div class="container">
         <div class="sh anim-fade">
           <div>
@@ -187,16 +73,22 @@
           </div>
         </div>
 
-        <div class="photo-filters anim-fade">
-          <button class="filter-btn photo-filter-btn is-active" data-album="all">All Photos</button>
-          <button class="filter-btn photo-filter-btn" data-album="africa">Africa</button>
-          <button class="filter-btn photo-filter-btn" data-album="caravan">Caravan Park</button>
-          <button class="filter-btn photo-filter-btn" data-album="bungarribee">Bungarribee</button>
-          <button class="filter-btn photo-filter-btn" data-album="garden">Garden</button>
-          <button class="filter-btn photo-filter-btn" data-album="tasmania">Tasmania</button>
+        <div class="album-grid anim-fade" id="album-grid"></div>
+      </div>
+    </section>
+
+    <!-- FILTER + GRID -->
+    <section class="section section--alt">
+      <div class="container">
+
+        <div class="port-filters anim-fade">
+          <button class="filter-btn is-active" data-filter="drawing">Pencil &amp; Ink</button>
+          <button class="filter-btn" data-filter="digital">Digital Art</button>
+          <button class="filter-btn" data-filter="photography">Photography</button>
+          <button class="filter-btn" data-filter="design">Web &amp; Design</button>
         </div>
 
-        <div class="photo-grid anim-fade" id="photo-grid"></div>
+        <div class="port-grid anim-fade"></div>
       </div>
     </section>
 
@@ -249,14 +141,6 @@
     </div>
 
   </main>
-
-  <div class="photo-modal" id="photo-modal">
-    <div class="photo-modal__backdrop"></div>
-    <div class="photo-modal__box">
-      <button class="photo-modal__close" id="photo-modal-close" aria-label="Close">✕</button>
-      <iframe class="photo-modal__frame" id="photo-modal-frame" src="" loading="lazy" title="Photo preview"></iframe>
-    </div>
-  </div>
 
   <footer class="footer">
     <div class="container">

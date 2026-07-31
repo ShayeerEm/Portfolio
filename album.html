@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Photo album — Shayeer Emanee" />
+  <title>Album — Shayeer Emanee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+
+  <div class="cursor cursor--dot" id="cursor-dot"></div>
+  <div class="cursor cursor--ring" id="cursor-ring"></div>
+
+  <div class="carousel-page" id="carousel-page">
+
+    <div class="carousel-top">
+      <a href="portfolio.html" class="carousel-back">← Portfolio</a>
+      <h1 class="carousel-title" id="carousel-title">Album</h1>
+      <span class="carousel-counter" id="carousel-counter">– / –</span>
+    </div>
+
+    <div class="carousel-stage">
+      <button class="carousel-arrow carousel-arrow--prev" id="carousel-prev" aria-label="Previous photo">←</button>
+
+      <div class="carousel-stage__frame">
+        <div class="carousel-stage__spinner" id="carousel-spinner"></div>
+        <img id="carousel-image" alt="" />
+      </div>
+
+      <button class="carousel-arrow carousel-arrow--next" id="carousel-next" aria-label="Next photo">→</button>
+    </div>
+
+    <div class="carousel-bottom">
+      <div class="carousel-progress">
+        <div class="carousel-progress__fill" id="carousel-progress-fill"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/photo-data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/album-carousel.js"></script>
+</body>
+</html>
