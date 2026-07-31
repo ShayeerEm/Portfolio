@@ -314,69 +314,62 @@ function initCounters() {
   counters.forEach(c => observer.observe(c));
 }
 
-/* ── PHOTOGRAPHY ALBUMS (Google Drive-backed) ─────────────────
-   Thumbnails use Drive's public thumbnail endpoint (small, cached,
-   lazy-loaded) — the full-size image is only ever fetched inside the
-   modal preview iframe when a visitor actually clicks a photo. */
+/* ── PHOTOGRAPHY ALBUM PICKER (Google Drive-backed) ───────────
+   A 2×3 grid of album tiles, each a small collage built from a
+   handful of that album's real thumbnails. Clicking a tile opens
+   album.html?album=<slug>, a dedicated full-page carousel. Only a
+   few small thumbnails per tile ever load here — never the full set. */
 function initPhotoAlbums() {
-  const grid = document.getElementById('photo-grid');
+  const grid = document.getElementById('album-grid');
   if (!grid || typeof PHOTO_ALBUMS === 'undefined') return;
 
-  const modal       = document.getElementById('photo-modal');
-  const modalFrame   = document.getElementById('photo-modal-frame');
-  const modalClose   = document.getElementById('photo-modal-close');
-  const modalBackdrop = modal.querySelector('.photo-modal__backdrop');
-
-  function openModal(id) {
-    modalFrame.src = `https://drive.google.com/file/d/${id}/preview`;
-    modal.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeModal() {
-    modal.classList.remove('is-open');
-    modalFrame.src = '';
-    document.body.style.overflow = '';
-  }
-  modalClose.addEventListener('click', closeModal);
-  modalBackdrop.addEventListener('click', closeModal);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
-  });
-
+  const COLLAGE_COUNT = 4;
   const frag = document.createDocumentFragment();
+
   Object.keys(PHOTO_ALBUMS).forEach((albumKey) => {
     const album = PHOTO_ALBUMS[albumKey];
-    album.ids.forEach((id) => {
-      const item = document.createElement('div');
-      item.className = 'photo-item';
-      item.setAttribute('data-album', albumKey);
 
+    const tile = document.createElement('a');
+    tile.className = 'album-tile';
+    tile.href = `album.html?album=${albumKey}`;
+
+    const collage = document.createElement('div');
+    collage.className = 'album-tile__collage';
+    album.ids.slice(0, COLLAGE_COUNT).forEach((id) => {
       const img = document.createElement('img');
       img.loading = 'lazy';
       img.decoding = 'async';
-      img.alt = `${album.label} photograph`;
-      img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w400`;
+      img.alt = '';
+      img.src = `https://drive.google.com/thumbnail?id=${id}&sz=w300`;
       img.addEventListener('load', () => img.setAttribute('data-loaded', ''));
-
-      item.appendChild(img);
-      item.addEventListener('click', () => openModal(id));
-      frag.appendChild(item);
+      collage.appendChild(img);
     });
+    tile.appendChild(collage);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'album-tile__overlay';
+    overlay.innerHTML = `
+      <p class="album-tile__title">${album.label}</p>
+      <p class="album-tile__count">${album.ids.length} Photos</p>
+    `;
+    tile.appendChild(overlay);
+
+    frag.appendChild(tile);
   });
+
+  // Keep the grid a tidy 2×3 — pad with a "coming soon" tile if fewer than 6 albums.
+  const totalTiles = Object.keys(PHOTO_ALBUMS).length;
+  if (totalTiles < 6 && totalTiles % 3 !== 0) {
+    const remainder = 3 - (totalTiles % 3);
+    for (let i = 0; i < remainder; i++) {
+      const soon = document.createElement('div');
+      soon.className = 'album-tile album-tile--soon';
+      soon.innerHTML = '<p class="album-tile__soon-label">More Soon</p>';
+      frag.appendChild(soon);
+    }
+  }
+
   grid.appendChild(frag);
-
-  const filterBtns = document.querySelectorAll('.photo-filter-btn');
-  filterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach((b) => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      const filter = btn.getAttribute('data-album');
-      grid.querySelectorAll('.photo-item').forEach((item) => {
-        const show = filter === 'all' || item.getAttribute('data-album') === filter;
-        item.style.display = show ? '' : 'none';
-      });
-    });
-  });
 }
 
 /* ── INIT ──────────────────────────────────────────────────── */
