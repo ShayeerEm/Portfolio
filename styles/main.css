@@ -949,9 +949,33 @@ a:hover .blog-featured__title { color: var(--red); }
   position: absolute; inset: 0 auto 0 0; background: #E83350; transition: width var(--dur-base) var(--ease);
 }
 
+.carousel-filmstrip {
+  flex-shrink: 0; display: flex; gap: .4rem;
+  padding: 0 clamp(1.25rem, 4vw, 3rem) 1.25rem;
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: thin; scrollbar-color: rgba(242,236,224,.3) transparent;
+}
+.carousel-filmstrip::-webkit-scrollbar { height: 5px; }
+.carousel-filmstrip::-webkit-scrollbar-thumb { background: rgba(242,236,224,.25); }
+.carousel-filmstrip::-webkit-scrollbar-track { background: transparent; }
+.carousel-filmstrip__item {
+  flex: 0 0 auto; width: 68px; height: 52px; overflow: hidden;
+  border: 1px solid transparent; opacity: .45; cursor: pointer;
+  background: rgba(242,236,224,.06);
+  transition: opacity var(--dur-base), border-color var(--dur-base);
+}
+.carousel-filmstrip__item:hover { opacity: .8; }
+.carousel-filmstrip__item.is-active { opacity: 1; border-color: #E83350; }
+.carousel-filmstrip__item img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  opacity: 0; transition: opacity var(--dur-base);
+}
+.carousel-filmstrip__item img[data-loaded] { opacity: 1; }
+
 @media (max-width: 640px) {
   .carousel-title { display: none; }
   .carousel-arrow { width: 2.25rem; height: 2.25rem; font-size: 1rem; }
+  .carousel-filmstrip__item { width: 52px; height: 40px; }
 }
 
 /* ── CONTACT ─────────────────────────────────────────────── */

@@ -22,6 +22,7 @@
   const prevBtn    = document.getElementById('carousel-prev');
   const nextBtn    = document.getElementById('carousel-next');
   const progressFill = document.getElementById('carousel-progress-fill');
+  const filmstrip  = document.getElementById('carousel-filmstrip');
   const stage      = document.querySelector('.carousel-stage');
 
   if (!album) {
@@ -46,6 +47,24 @@
     img.src = thumbUrl(album.ids[i], 1920);
   }
 
+  // Build the filmstrip once — small thumbnails, lazy-loaded, one per photo.
+  const filmstripItems = album.ids.map((id, i) => {
+    const item = document.createElement('div');
+    item.className = 'carousel-filmstrip__item';
+
+    const img = document.createElement('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = '';
+    img.src = thumbUrl(id, 150);
+    img.addEventListener('load', () => img.setAttribute('data-loaded', ''));
+    item.appendChild(img);
+
+    item.addEventListener('click', () => jumpTo(i));
+    filmstrip.appendChild(item);
+    return item;
+  });
+
   function render() {
     const id = album.ids[index];
     imageEl.classList.remove('is-visible');
@@ -65,15 +84,21 @@
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === total - 1;
 
+    filmstripItems.forEach((item, i) => item.classList.toggle('is-active', i === index));
+    filmstripItems[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
     preload(index + 1);
     preload(index - 1);
   }
 
-  function go(delta) {
-    const next = index + delta;
-    if (next < 0 || next >= total) return;
-    index = next;
+  function jumpTo(i) {
+    if (i < 0 || i >= total || i === index) return;
+    index = i;
     render();
+  }
+
+  function go(delta) {
+    jumpTo(index + delta);
   }
 
   prevBtn.addEventListener('click', () => go(-1));
